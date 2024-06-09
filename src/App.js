@@ -1,23 +1,21 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
 
 function App() {
+  const [info, setInfo] = useState("loading...");
+
+  useEffect(() => {
+    (async() => {
+      // const backendHost = process.env.BACKEND_HOST;
+      // console.log(backendHost);
+      const response = await fetch("http://localhost:4001");
+      setInfo(await response.text());
+    })()
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      result: {info}
     </div>
   );
 }
