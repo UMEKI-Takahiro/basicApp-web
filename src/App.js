@@ -16,7 +16,8 @@ function App() {
 
   return (
     <div className="App">
-      result: {info}
+      <h1>Hello World!</h1>
+      <div> DB info: {info}</div>
     </div>
   );
 }
