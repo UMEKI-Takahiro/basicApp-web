@@ -1,0 +1,38 @@
+name: Build and Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: ${{ vars.AWS_REGION }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+      - name: Build
+        uses: ./.github/actions/container-build/
+        id: build
+        with:
+          ecr-repository-uri: ${{ vars.ECR_REPOSITORY_URI }}
+          dockerfile-path: docker/ecs/
+      - name: Deploy
+        uses: ./.github/actions/container-deploy/
+        with:
+          ecs-cluster: ${{ vars.ECS_CLUSTER_NAME }}
+          ecs-service: ${{ vars.ESC_SERVICE_NAME }}
+          task-definition: ${{ vars.TASK_DEFINITION_NAME }}
+          container-name: ${{ vars.CONTAINER_NAME }}
+          container-image: ${{ steps.build.outputs.container-image }}
+
