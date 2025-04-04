@@ -9,6 +9,9 @@ inputs:
   dockerfile-path:
     required: true
     description: path to Dockerfile
+  dockerfile-name:
+    required: true
+    description: Dockerfile name
 
 outputs:
   container-image:
@@ -28,6 +31,7 @@ runs:
       with:
         push: true
         context: ${{ inputs.dockerfile-path }}
+        file: ${{ inputs.dockerfile-name }}
         tags: ${{ steps.meta.outputs.tags }}
         labels: ${{ steps.meta.outputs.labels }}
 
