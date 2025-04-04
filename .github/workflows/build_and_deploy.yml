@@ -13,6 +13,13 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       AWS_REGION: ${{ vars.AWS_REGION }}
+      ECR_REPOSITORY_URI: ${{ vars.ECR_REPOSITORY_URI }}
+      DOCKERFILE_PATH: ${{ vars.DOCKERFILE_PATH }}
+      DOCKERFILE_NAME: ${{ vars.DOCKERFILE_NAME }}
+      ECS_CLUSTER_NAME: ${{ vars.ECS_CLUSTER_NAME }}
+      ECS_SERVICE_NAME: ${{ vars.ECS_SERVICE_NAME }}
+      TASK_DEFINITION_NAME: ${{ vars.TASK_DEFINITION_NAME }}
+      CONTAINER_NAME: ${{ vars.CONTAINER_NAME }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,14 +33,15 @@ jobs:
         uses: ./.github/actions/container-build/
         id: build
         with:
-          ecr-repository-uri: ${{ vars.ECR_REPOSITORY_URI }}
-          dockerfile-path: docker/ecs/
+          ecr-repository-uri: ${{ env.ECR_REPOSITORY_URI }}
+          dockerfile-path: ${{ env.DOCKERFILE_PATH }}
+          dockerfile-name: ${{ env.DOCKERFILE_NAME }}
       - name: Deploy
         uses: ./.github/actions/container-deploy/
         with:
-          ecs-cluster: ${{ vars.ECS_CLUSTER_NAME }}
-          ecs-service: ${{ vars.ECS_SERVICE_NAME }}
-          task-definition: ${{ vars.TASK_DEFINITION_NAME }}
-          container-name: ${{ vars.CONTAINER_NAME }}
+          ecs-cluster: ${{ env.ECS_CLUSTER_NAME }}
+          ecs-service: ${{ env.ECS_SERVICE_NAME }}
+          task-definition: ${{ env.TASK_DEFINITION_NAME }}
+          container-name: ${{ env.CONTAINER_NAME }}
           container-image: ${{ steps.build.outputs.container-image }}
 
