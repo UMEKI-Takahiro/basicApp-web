@@ -6,10 +6,8 @@ function App() {
 
   useEffect(() => {
     (async() => {
-      const backendHost = "http://localhost";
-      // const backendHost = process.env.BACKEND_HOST;
-      // console.log(backendHost);
-      const response = await fetch(`${backendHost}/api`);
+      const domain = process.env.DOMAIN;
+      const response = await fetch(`http://${domain}/api`);
       setInfo(await response.text());
     })()
   }, []);
