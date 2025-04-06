@@ -12,7 +12,7 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start-dev": "DOMAIN=localhost react-scripts start",
+    "start-dev": "react-scripts start",
     "start-prod": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

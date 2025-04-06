@@ -1,4 +1,4 @@
-FROM node:16 AS builder
+FROM node:18 AS builder
 WORKDIR /app
 COPY package*.json .
 RUN npm install
@@ -9,6 +9,6 @@ FROM nginx:latest
 COPY nginx.conf.template /etc/nginx/nginx.conf.template
 COPY --from=builder /app/build /usr/share/nginx/html
 EXPOSE 80
-ENV DOMAIN="takahiro2.com" LOCAL_APP_DOMAIN="app.local"
+ENV LOCAL_APP_DOMAIN="app.local"
 CMD ["sh", "-c", "envsubst '$LOCAL_APP_DOMAIN' < /etc/nginx/nginx.conf.template > /etc/nginx/nginx.conf && nginx -g 'daemon off;'"]
 

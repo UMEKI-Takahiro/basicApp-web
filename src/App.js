@@ -6,8 +6,7 @@ function App() {
 
   useEffect(() => {
     (async() => {
-      const domain = process.env.DOMAIN;
-      const response = await fetch(`http://${domain}/api`);
+      const response = await fetch("/api");
       setInfo(await response.text());
     })()
   }, []);
